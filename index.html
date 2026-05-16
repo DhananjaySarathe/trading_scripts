@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trading Playbook · NSE India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400&family=JetBrains+Mono:wght@400;500;700&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-elevated: #131313;
+    --bg-card: #161616;
+    --border: #262626;
+    --border-strong: #383838;
+    --text: #e8e6e0;
+    --text-dim: #8a8780;
+    --text-faint: #5a5852;
+    --accent: #d4ff3a;
+    --bullish: #4ade80;
+    --bearish: #ef4444;
+    --warning: #f59e0b;
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Inter Tight', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', 'SF Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(212, 255, 58, 0.04) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(74, 222, 128, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: overlay;
+  }
+
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ==================== HEADER ==================== */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 24px 0;
+    position: sticky;
+    top: 0;
+    background: rgba(10, 10, 10, 0.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  .header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .logo {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .logo span {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .ticker-strip {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    gap: 18px;
+  }
+
+  .ticker-strip .live::before {
+    content: '●';
+    color: var(--bullish);
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ==================== HERO ==================== */
+  .hero {
+    padding: 100px 0 80px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .hero-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .hero-meta::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(48px, 7vw, 96px);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    font-weight: 400;
+    margin-bottom: 32px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 300;
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    color: var(--text-dim);
+    max-width: 640px;
+    line-height: 1.6;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-top: 64px;
+    border-top: 1px solid var(--border);
+  }
+
+  .hero-stat {
+    padding: 24px 24px 24px 0;
+    border-right: 1px solid var(--border);
+  }
+
+  .hero-stat:last-child { border-right: none; padding-right: 0; }
+  .hero-stat:not(:first-child) { padding-left: 24px; }
+
+  .hero-stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+  }
+
+  .hero-stat-value {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  /* ==================== NAV ==================== */
+  .toc {
+    padding: 48px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .toc-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 14px 20px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s ease;
+    font-size: 15px;
+  }
+
+  .toc-item:hover {
+    border-color: var(--accent);
+    background: var(--bg-card);
+    transform: translateX(4px);
+  }
+
+  .toc-item-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+
+  /* ==================== SECTIONS ==================== */
+  section {
+    padding: 80px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    min-width: 40px;
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    font-weight: 400;
+    flex: 1;
+  }
+
+  h2 em { font-style: italic; color: var(--text-dim); }
+
+  h3 {
+    font-family: var(--serif);
+    font-size: 26px;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+    margin: 40px 0 16px;
+  }
+
+  h4 {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin: 24px 0 12px;
+  }
+
+  p {
+    color: var(--text);
+    margin-bottom: 16px;
+    max-width: 75ch;
+  }
+
+  p.lead {
+    font-size: 18px;
+    color: var(--text-dim);
+    margin-bottom: 24px;
+  }
+
+  ul, ol {
+    margin: 16px 0 24px 20px;
+    color: var(--text);
+  }
+
+  li { margin-bottom: 8px; max-width: 75ch; }
+
+  strong { color: var(--text); font-weight: 600; }
+
+  /* ==================== CARDS / SCANNERS ==================== */
+  .scanner-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    margin: 24px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scanner-card.bullish::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--bullish);
+  }
+
+  .scanner-card.bearish::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--bearish);
+  }
+
+  .scanner-card.neutral::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent);
+  }
+
+  .scanner-head {
+    padding: 24px 28px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .scanner-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+
+  .tag-bull { background: rgba(74, 222, 128, 0.12); color: var(--bullish); }
+  .tag-bear { background: rgba(239, 68, 68, 0.12); color: var(--bearish); }
+  .tag-intra { background: rgba(245, 158, 11, 0.12); color: var(--warning); }
+  .tag-swing { background: rgba(212, 255, 58, 0.12); color: var(--accent); }
+
+  .scanner-title {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .scanner-desc {
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+
+  .code-block {
+    position: relative;
+    background: #0a0a0a;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .code-block pre {
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+    color: #c8c5be;
+    padding: 24px 28px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .copy-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .copy-btn.copied {
+    border-color: var(--bullish);
+    color: var(--bullish);
+  }
+
+  .scanner-foot {
+    padding: 20px 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    font-size: 14px;
+  }
+
+  .scanner-foot-item h5 {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 6px;
+  }
+
+  .scanner-foot-item p {
+    margin: 0;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  /* ==================== PHASE BLOCKS ==================== */
+  .phase {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 32px;
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .phase:first-of-type { border-top: none; padding-top: 0; }
+
+  .phase-num {
+    font-family: var(--serif);
+    font-size: 64px;
+    line-height: 1;
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 300;
+  }
+
+  .phase-time {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-faint);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .phase-title {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  /* ==================== CALLOUTS ==================== */
+  .callout {
+    padding: 24px 28px;
+    margin: 24px 0;
+    border-left: 3px solid var(--warning);
+    background: rgba(245, 158, 11, 0.04);
+  }
+
+  .callout.danger {
+    border-color: var(--bearish);
+    background: rgba(239, 68, 68, 0.04);
+  }
+
+  .callout.success {
+    border-color: var(--bullish);
+    background: rgba(74, 222, 128, 0.04);
+  }
+
+  .callout-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: var(--warning);
+  }
+
+  .callout.danger .callout-label { color: var(--bearish); }
+  .callout.success .callout-label { color: var(--bullish); }
+
+  .callout p:last-child { margin-bottom: 0; }
+
+  /* ==================== TABLES ==================== */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 14px;
+  }
+
+  .data-table th {
+    text-align: left;
+    padding: 14px 16px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border-bottom: 2px solid var(--border-strong);
+    background: var(--bg-elevated);
+  }
+
+  .data-table td {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+
+  .data-table tr:hover td { background: var(--bg-elevated); }
+
+  /* ==================== CHECKLIST ==================== */
+  .checklist {
+    list-style: none;
+    margin-left: 0;
+    counter-reset: check-counter;
+  }
+
+  .checklist li {
+    counter-increment: check-counter;
+    padding: 14px 0 14px 48px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .checklist li::before {
+    content: counter(check-counter, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 14px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+
+  /* ==================== FOOTER ==================== */
+  footer {
+    padding: 64px 0 48px;
+    border-top: 1px solid var(--border);
+  }
+
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 48px;
+  }
+
+  .foot-disclaimer {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-style: italic;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .foot-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-faint);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .foot-meta div { margin-bottom: 6px; }
+
+  /* ==================== RESPONSIVE ==================== */
+  @media (max-width: 768px) {
+    .container { padding: 0 20px; }
+    .hero { padding: 64px 0 48px; }
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    .hero-stat { border-bottom: 1px solid var(--border); }
+    .hero-stat:nth-child(2) { border-right: none; }
+    .toc-grid { grid-template-columns: 1fr; }
+    .phase { grid-template-columns: 1fr; gap: 12px; }
+    .phase-num { font-size: 48px; }
+    .scanner-foot { grid-template-columns: 1fr; }
+    .foot-grid { grid-template-columns: 1fr; gap: 24px; }
+    .ticker-strip { display: none; }
+    .section-header { flex-direction: column; gap: 8px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container header-inner">
+    <div class="logo">The <span>Playbook</span></div>
+    <div class="ticker-strip">
+      <span class="live">LIVE REFERENCE</span>
+      <span>NSE · BSE</span>
+      <span>v1.0</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-meta">A Personal Trading Reference · Indian Markets</div>
+    <h1>Scan. Filter. <em>Decide.</em><br>Trade with a system.</h1>
+    <p class="hero-sub">A working playbook for swing and intraday trading on NSE — scanners, setups, risk rules, and the discipline that separates traders from gamblers.</p>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-label">Max Risk / Trade</div>
+        <div class="hero-stat-value">1–2%</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-label">Daily Loss Cap</div>
+        <div class="hero-stat-value">3%</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-label">Target R:R</div>
+        <div class="hero-stat-value">1:2</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-label">Universe</div>
+        <div class="hero-stat-value">Nifty 500</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOC -->
+  <section class="toc">
+    <div class="toc-label">— Contents</div>
+    <div class="toc-grid">
+      <a class="toc-item" href="#foundation"><span>The Foundation</span><span class="toc-item-num">01</span></a>
+      <a class="toc-item" href="#swing"><span>Swing Trading Scanners</span><span class="toc-item-num">02</span></a>
+      <a class="toc-item" href="#intraday-plan"><span>Intraday Game Plan</span><span class="toc-item-num">03</span></a>
+      <a class="toc-item" href="#intraday-scanners"><span>Intraday Scanners</span><span class="toc-item-num">04</span></a>
+      <a class="toc-item" href="#shorting"><span>Shorting in India</span><span class="toc-item-num">05</span></a>
+      <a class="toc-item" href="#risk"><span>Risk Management</span><span class="toc-item-num">06</span></a>
+      <a class="toc-item" href="#workflow"><span>Daily Workflow</span><span class="toc-item-num">07</span></a>
+      <a class="toc-item" href="#progression"><span>Progression Roadmap</span><span class="toc-item-num">08</span></a>
+    </div>
+  </section>
+
+  <!-- ====================== 01 FOUNDATION ====================== -->
+  <section id="foundation">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <h2>The <em>foundation</em></h2>
+    </div>
+
+    <p class="lead">Before any scanner or setup matters, three things must exist.</p>
+
+    <h3>Capital you can afford to lose</h3>
+    <p>Especially for intraday. If losing 20% of this money would affect your rent, food, or sleep — the amount is wrong, not the strategy.</p>
+
+    <h3>A written trading plan</h3>
+    <p>One page. Entry rules, exit rules, max loss per trade, max loss per day, instruments you trade, hours you trade. If you can't write it down, you don't have a system — you have vibes.</p>
+
+    <h3>A trade journal</h3>
+    <p>Every trade logged: entry, exit, reason, emotion, outcome. This is the single highest-ROI habit in trading. Excel works fine.</p>
+
+    <div class="callout success">
+      <div class="callout-label">⏵ Principle</div>
+      <p>Risk management is the actual edge. Strategy is secondary. Tools are tertiary. Most retail traders fail the discipline test, not the strategy test.</p>
+    </div>
+  </section>
+
+  <!-- ====================== 02 SWING ====================== -->
+  <section id="swing">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <h2>Swing trading <em>scanners</em></h2>
+    </div>
+
+    <p class="lead">Holding period: a few days to a few weeks. Run scans on Chartink after 3:30 PM, EOD scan type. Universe: Nifty 500.</p>
+
+    <!-- Scanner 1 -->
+    <div class="scanner-card bullish" id="swing-1">
+      <div class="scanner-head">
+        <span class="scanner-tag tag-swing">SWING · BREAKOUT</span>
+        <div class="scanner-title">52-Week High Breakout with Volume</div>
+        <p class="scanner-desc">Stock breaking out of a long base on heavy volume. Classic momentum entry.</p>
+      </div>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre>( {nifty 500} ( latest close &gt; latest "high 250"
+and latest volume &gt; 2 * latest sma( volume,50 )
+and latest close &gt; 1.02 * latest open
+and latest rsi(14) &gt; 60
+and latest rsi(14) &lt; 80 ) )</pre>
+      </div>
+      <div class="scanner-foot">
+        <div class="scanner-foot-item">
+          <h5>How to enter</h5>
+          <p>Next day on a small pullback or above breakout day's high. Stop-loss below breakout day's low.</p>
+        </div>
+        <div class="scanner-foot-item">
+          <h5>Target</h5>
+          <p>1.5x to 2x your risk. Trail with 10-day low once in profit.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scanner 2 -->
+    <div class="scanner-card bullish" id="swing-2">
+      <div class="scanner-head">
+        <span class="scanner-tag tag-swing">SWING · PULLBACK</span>
+        <div class="scanner-title">Strong Stock Taking a Breather</div>
+        <p class="scanner-desc">Stocks in clear uptrends pulled back to support. Lower-risk entry than chasing breakouts.</p>
+      </div>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre>( {nifty 500} ( latest close &gt; latest sma( close,50 )
+and latest sma( close,50 ) &gt; latest sma( close,200 )
+and latest close &lt; latest sma( close,20 )
+and latest low &lt;= latest sma( close,50 ) * 1.02
+and latest rsi(14) &gt; 40
+and latest rsi(14) &lt; 55
+and latest volume &gt; latest sma( volume,20 ) ) )</pre>
+      </div>
+      <div class="scanner-foot">
+        <div class="scanner-foot-item">
+          <h5>How to enter</h5>
+          <p>Wait for bullish reversal candle (hammer, engulfing) near 50-DMA. Enter on confirmation.</p>
+        </div>
+        <div class="scanner-foot-item">
+          <h5>Stop-loss</h5>
+          <p>Below recent swing low or 3-4% below entry, whichever is tighter.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scanner 3 -->
+    <div class="scanner-card bullish" id="swing-3">
+      <div class="scanner-head">
+        <span class="scanner-tag tag-swing">SWING · TREND</span>
+        <div class="scanner-title">Stage 2 Uptrend with Momentum</div>
+        <p class="scanner-desc">Stocks in confirmed long-term uptrends showing fresh strength. Multi-week moves.</p>
+      </div>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre>( {nifty 500} ( latest close &gt; latest sma( close,20 )
+and latest sma( close,20 ) &gt; latest sma( close,50 )
+and latest sma( close,50 ) &gt; latest sma( close,200 )
+and latest close &gt; 1.3 * latest min( close,250 )
+and latest close &gt; latest "high 50"
+and latest volume &gt; latest sma( volume,30 ) ) )</pre>
+      </div>
+      <div class="scanner-foot">
+        <div class="scanner-foot-item">
+          <h5>How to use</h5>
+          <p>Best as a watchlist builder, not entry trigger. Pick 5-10, then wait for pullback (Scanner 2 logic).</p>
+        </div>
+        <div class="scanner-foot-item">
+          <h5>Typical output</h5>
+          <p>10-30 stocks. Combine with sector strength check.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">⏵ Real-world cautions</div>
+      <p><strong>Scanners give candidates, not trades.</strong> Always look at the chart before deciding. A breakout into a major resistance level from 2 years ago is a bad trade even if flagged.</p>
+      <p><strong>Market regime matters.</strong> In a falling market (Nifty below 200-DMA), even good breakouts fail 70%+ of the time. Always check Nifty's trend first.</p>
+      <p><strong>Sector strength.</strong> A breakout in a weak sector usually fails. Check if 2-3 stocks from the same sector are also showing up — sector tailwind helps.</p>
+    </div>
+  </section>
+
+  <!-- ====================== 03 INTRADAY PLAN ====================== -->
+  <section id="intraday-plan">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <h2>Intraday <em>game plan</em></h2>
+    </div>
+
+    <p class="lead">A five-phase structured day. Built around opening range breakouts with multi-timeframe filters — one of the most tested setups in Indian markets.</p>
+
+    <div class="phase">
+      <div class="phase-num">i</div>
+      <div>
+        <div class="phase-time">08:45 — 09:15 · Pre-market prep</div>
+        <div class="phase-title">Build the watchlist</div>
+        <p>Use the previous evening's bullish and bearish scans (Section 04) to identify 10-15 candidates. Check SGX Nifty / GIFT Nifty at 08:45 for expected gap direction. Scan global cues (Dow, Nasdaq close). Check stock-specific news for watchlist names.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-num">ii</div>
+      <div>
+        <div class="phase-time">09:15 — 09:30 · Opening volatility</div>
+        <div class="phase-title">Do nothing. Watch only.</div>
+        <p>This window has the most fake moves and institutional algorithms eating retail. Your only job: mark which watchlist stocks gapped up with volume (potential longs), gapped down with volume (potential shorts), and note the <strong>9:15-9:30 high and low</strong> for each — your opening range.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-num">iii</div>
+      <div>
+        <div class="phase-time">09:30 onwards · Entry setup</div>
+        <div class="phase-title">Multi-timeframe alignment</div>
+        <p>Check in this order on a watchlist stock:</p>
+        <ol>
+          <li><strong>Daily chart</strong> — is it in an uptrend? (Above 50-DMA, higher highs/lows). If no, skip.</li>
+          <li><strong>15-minute chart</strong> — where is price vs opening range? You want price above the 9:15-9:30 high for longs.</li>
+          <li><strong>5-minute chart</strong> — for entry timing only, not direction.</li>
+        </ol>
+        <p><strong>Entry trigger:</strong> Stock breaks above its 9:15-9:30 high on a 5-min candle, volume higher than previous candle, 15-min trend up, daily bullish.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-num">iv</div>
+      <div>
+        <div class="phase-time">Throughout · Trade management</div>
+        <div class="phase-title">Manage the position</div>
+        <ul>
+          <li><strong>Stop-loss:</strong> below opening range low, or 0.5-0.7% below entry — whichever is tighter</li>
+          <li><strong>Target 1:</strong> 1x your risk — book 50%</li>
+          <li><strong>Target 2:</strong> 2x risk, or trail with 15-min candle lows</li>
+          <li><strong>Time stop:</strong> if trade hasn't moved in your favor by 11:30 AM, exit. Stale trades = losing trades intraday.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-num">v</div>
+      <div>
+        <div class="phase-time">14:30 — 15:15 · Wind down</div>
+        <div class="phase-title">No new trades after 2:30 PM</div>
+        <p>Last hour is institutional rebalancing — choppy and dangerous for retail. Close all intraday positions by 3:15 PM regardless of P&L. Avoid auto-square-off slippage at 3:20.</p>
+      </div>
+    </div>
+
+    <div class="callout danger">
+      <div class="callout-label">⏵ Honest expectation</div>
+      <p>Out of 10-15 watchlist stocks, you'll typically get 2-4 valid setups. Trade max 2-3. Win rate for a disciplined ORB+MTF system is 45-55% — the edge comes from <strong>1:2 risk-reward</strong>, not high win rate. You will have losing days and losing weeks. A profitable intraday trader has more green months than red, not green days than red.</p>
+    </div>
+  </section>
+
+  <!-- ====================== 04 INTRADAY SCANNERS ====================== -->
+  <section id="intraday-scanners">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <h2>Intraday <em>scanners</em></h2>
+    </div>
+
+    <h3>Pre-market watchlist builders (run EOD, previous evening)</h3>
+
+    <!-- Bullish watchlist -->
+    <div class="scanner-card bullish" id="intra-watch-bull">
+      <div class="scanner-head">
+        <span class="scanner-tag tag-bull">EOD · LONGS WATCHLIST</span>
+        <div class="scanner-title">Bullish Watchlist for Tomorrow</div>
+        <p class="scanner-desc">Nifty 500 stocks in uptrends, above-average volume, closing bullish.</p>
+      </div>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre>( {nifty 500} ( latest close &gt; latest sma( close,50 )
+and latest sma( close,50 ) &gt; latest sma( close,200 )
+and latest volume &gt; latest sma( volume,20 )
+and latest close &gt; 1.005 * latest open
+and market cap &gt; 5000 ) )</pre>
+      </div>
+      <div class="scanner-foot">
+        <div class="scanner-foot-item">
+          <h5>Use as</h5>
+          <p>Long-side candidates for next day's intraday session.</p>
+        </div>
+        <div class="scanner-foot-item">
+          <h5>Filter</h5>
+          <p>Top 10-15 by volume or visual chart strength.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bearish watchlist -->
+    <div class="scanner-card bearish" id="intra-watch-bear">
+      <div class="scanner-head">
+        <span class="scanner-tag tag-bear">EOD · SHORTS WATCHLIST</span>
+        <div class="scanner-title">Bearish Watchlist for Tomorrow</div>
+        <p class="scanner-desc">Mirror image — stocks in downtrends, above-average volume, closing weak.</p>
+      </div>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre>( {nifty 500} ( latest close &lt; latest sma( close,50 )
+and latest sma( close,50 ) &lt; latest sma( close,200 )
+and latest volume &gt; latest sma( volume,20 )
+and latest close &lt; 0.995 * latest open
+and market cap &gt; 5000 ) )</pre>
+      </div>
+      <div class="scanner-foot">
+        <div class="scanner-foot-item">
+          <h5>Use only when</h5>
+          <p>Nifty itself is weak (below 50-DMA). In bullish regimes, shorts fail more often.</p>
+        </div>
+        <div class="scanner-foot-item">
+          <h5>Best for</h5>
+          <p>F&amp;O stocks (intraday short via MIS/CO). See Section 05.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Live intraday scanners (run during market hours)</h3>
+
+    <!-- ORB -->
+    <div class="scanner-card neutral" id="intra-orb">
+      <div class="scanner-head">
+        <span class="scanner-tag tag-intra">INTRADAY · 09:35 AM</span>
+        <div class="scanner-title">Opening Range Breakout</div>
+        <p class="scanner-desc">Stocks breaking out of opening range on 5-min chart with volume, also above daily 50-DMA.</p>
+      </div>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre>( {nifty 500} ( [0] 5 minute close &gt; [-1 to -3] 5 minute max ( high )
+and [0] 5 minute volume &gt; [-1] 5 minute volume
+and [0] 5 minute close &gt; [0] 5 minute open
+and latest close &gt; latest sma( close,50 ) ) )</pre>
+      </div>
+      <div class="scanner-foot">
+        <div class="scanner-foot-item">
+          <h5>Scan type</h5>
+          <p>5-minute intraday scan in Chartink.</p>
+        </div>
+        <div class="scanner-foot-item">
+          <h5>Timing</h5>
+          <p>Run at 9:35 AM after opening range completes.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Momentum -->
+    <div class="scanner-card neutral" id="intra-momentum">
+      <div class="scanner-head">
+        <span class="scanner-tag tag-intra">INTRADAY · 10:00 AM+</span>
+        <div class="scanner-title">Mid-day Momentum Breakout</div>
+        <p class="scanner-desc">Catches breakouts from consolidation that emerge after the opening volatility settles.</p>
+      </div>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre>( {nifty 500} ( [0] 15 minute close &gt; [-1] 15 minute high
+and [0] 15 minute volume &gt; 1.5 * [-1] 15 minute volume
+and [0] 15 minute rsi(14) &gt; 60
+and [0] 15 minute rsi(14) &lt; 75
+and latest close &gt; latest sma( close,20 ) ) )</pre>
+      </div>
+      <div class="scanner-foot">
+        <div class="scanner-foot-item">
+          <h5>Scan type</h5>
+          <p>15-minute intraday scan.</p>
+        </div>
+        <div class="scanner-foot-item">
+          <h5>Best window</h5>
+          <p>10:00 AM to 1:30 PM.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- VWAP -->
+    <div class="scanner-card neutral" id="intra-vwap">
+      <div class="scanner-head">
+        <span class="scanner-tag tag-intra">INTRADAY · 10:30 AM+</span>
+        <div class="scanner-title">VWAP Bounce</div>
+        <p class="scanner-desc">Stocks bouncing off VWAP — institutional support level. Strong intraday setup.</p>
+      </div>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre>( {nifty 500} ( [0] 5 minute low &lt;= [0] 5 minute "sma(close,vwap)"
+and [0] 5 minute close &gt; [0] 5 minute "sma(close,vwap)"
+and [0] 5 minute close &gt; [0] 5 minute open
+and latest close &gt; latest sma( close,50 ) ) )</pre>
+      </div>
+      <div class="scanner-foot">
+        <div class="scanner-foot-item">
+          <h5>Why VWAP matters</h5>
+          <p>Institutions benchmark to VWAP. Bounces off it indicate large buyer interest.</p>
+        </div>
+        <div class="scanner-foot-item">
+          <h5>Entry</h5>
+          <p>On the candle close above VWAP with a green body.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== 05 SHORTING ====================== -->
+  <section id="shorting">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <h2>Shorting in <em>India</em></h2>
+    </div>
+
+    <p class="lead">How shorting actually works in NSE — practical constraints most retail traders learn the painful way.</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Holding Period</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Intraday MIS / CO</strong></td>
+          <td>Same day only (cover by 3:15 PM)</td>
+          <td>Allowed on almost all F&amp;O stocks. Simplest method.</td>
+        </tr>
+        <tr>
+          <td><strong>Futures</strong></td>
+          <td>Overnight allowed</td>
+          <td>F&amp;O stocks only (~180 stocks). 1 lot = ₹5-15L notional. High margin.</td>
+        </tr>
+        <tr>
+          <td><strong>Options (Buy Puts)</strong></td>
+          <td>Until expiry</td>
+          <td>Defined risk = premium paid. Better for swing shorts as a beginner.</td>
+        </tr>
+        <tr>
+          <td><strong>Stock SLB</strong></td>
+          <td>Up to 12 months</td>
+          <td>Exists but illiquid for retail. Largely ignore.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <div class="callout-label">⏵ Recommendation</div>
+      <p><strong>For intraday:</strong> Use both bullish and bearish scanners. Long the strong, short the weak.</p>
+      <p><strong>For swing trades (first 6 months):</strong> Stick to longs only. Indian markets have a long-term bullish bias. Shorting requires F&amp;O knowledge, tighter risk management, and stocks fall faster than they rise — emotionally harder. When you do short for swings later, use put options (defined risk) not futures.</p>
+    </div>
+
+    <h3>When to favor shorts</h3>
+    <ul>
+      <li>Nifty itself is below its 50-DMA (bearish regime)</li>
+      <li>Stock is in a clear Stage 4 decline (lower highs, lower lows on weekly chart)</li>
+      <li>There's a fundamental catalyst (bad results, sector headwind)</li>
+    </ul>
+    <p>If Nifty is making new highs, ignore short signals for the day and focus only on longs.</p>
+  </section>
+
+  <!-- ====================== 06 RISK ====================== -->
+  <section id="risk">
+    <div class="section-header">
+      <div class="section-num">06</div>
+      <h2>Risk <em>management</em></h2>
+    </div>
+
+    <p class="lead">More important than any scanner or setup. This is where the edge actually lives.</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Rule</th>
+          <th>Number</th>
+          <th>Why it matters</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Max risk per trade</td>
+          <td><strong>1–2% of capital</strong></td>
+          <td>If capital is ₹1L, max loss per trade is ₹1,000–₹2,000.</td>
+        </tr>
+        <tr>
+          <td>Daily loss limit</td>
+          <td><strong>3% of capital</strong></td>
+          <td>Stop trading after hitting this. Walk away. Survivors do this.</td>
+        </tr>
+        <tr>
+          <td>Target risk-reward</td>
+          <td><strong>1:2 minimum</strong></td>
+          <td>If risking ₹1, target ₹2+. Win rate of 40% still profitable.</td>
+        </tr>
+        <tr>
+          <td>Max open positions (swing)</td>
+          <td><strong>5–7</strong></td>
+          <td>Beyond this, monitoring quality degrades.</td>
+        </tr>
+        <tr>
+          <td>Max sector concentration</td>
+          <td><strong>25% of capital</strong></td>
+          <td>One sector blowing up shouldn't end the account.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Position sizing formula</h3>
+    <div class="code-block" style="border: 1px solid var(--border); margin: 24px 0;">
+<pre>Quantity = (Capital × Risk%) ÷ (Entry − Stop Loss)
+
+Example:
+  Capital  = ₹2,00,000
+  Risk%    = 1%
+  Entry    = ₹450
+  SL       = ₹442
+  Risk/sh  = ₹8
+
+  Quantity = (200000 × 0.01) ÷ 8 = 250 shares</pre>
+    </div>
+    <p>Learn this cold. Run it for every trade. This formula alone separates traders from gamblers.</p>
+  </section>
+
+  <!-- ====================== 07 WORKFLOW ====================== -->
+  <section id="workflow">
+    <div class="section-header">
+      <div class="section-num">07</div>
+      <h2>Daily <em>workflow</em></h2>
+    </div>
+
+    <h3>Weekday (intraday + swing)</h3>
+    <ul class="checklist">
+      <li><strong>8:30 AM</strong> — Check SGX/GIFT Nifty, global cues, overnight news on watchlist stocks.</li>
+      <li><strong>9:15 AM</strong> — Observe opening. Mark opening range highs/lows on candidates.</li>
+      <li><strong>9:30 AM</strong> — Run intraday ORB scanner. Cross-check with daily &amp; 15-min charts.</li>
+      <li><strong>9:30–11:30</strong> — Take A-grade setups only. Max 2-3 intraday trades.</li>
+      <li><strong>11:30–14:30</strong> — Manage open positions. Run mid-day momentum scanner once.</li>
+      <li><strong>14:30 onwards</strong> — No new intraday entries. Trail or exit existing positions.</li>
+      <li><strong>3:15 PM</strong> — Square off all intraday positions.</li>
+      <li><strong>After 3:30 PM</strong> — Run EOD swing scanners. Build tomorrow's watchlist. Update journal.</li>
+    </ul>
+
+    <h3>Sunday review (mandatory)</h3>
+    <ul class="checklist">
+      <li>Review every trade of the week — what worked, what didn't.</li>
+      <li>Check Nifty weekly chart. Is the market regime changing?</li>
+      <li>Update swing watchlist for the coming week.</li>
+      <li>Identify one mistake you'll specifically avoid next week.</li>
+    </ul>
+  </section>
+
+  <!-- ====================== 08 PROGRESSION ====================== -->
+  <section id="progression">
+    <div class="section-header">
+      <div class="section-num">08</div>
+      <h2>Progression <em>roadmap</em></h2>
+    </div>
+
+    <div class="phase">
+      <div class="phase-num">1</div>
+      <div>
+        <div class="phase-time">Months 1 — 3</div>
+        <div class="phase-title">Paper trade only</div>
+        <p>Sensibull or TradingView paper trading. Build the journal habit. Run all scanners daily. Track which setups feel right to your eye. The goal: zero real money risk, maximum observation.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-num">2</div>
+      <div>
+        <div class="phase-time">Months 3 — 6</div>
+        <div class="phase-title">Small real capital (₹10–25k)</div>
+        <p>Trade real money in tiny size. Goal is not profit — it's following rules under emotional pressure. Paper trading and real trading feel completely different.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-num">3</div>
+      <div>
+        <div class="phase-time">Months 6 — 12</div>
+        <div class="phase-title">Scale carefully</div>
+        <p>Scale up only after 3+ consistently profitable months. Most people quit or blow up here. The ones who survive started small and respected the process.</p>
+      </div>
+    </div>
+
+    <div class="callout success">
+      <div class="callout-label">⏵ The mindset</div>
+      <p>Profitable traders have more green months than red — not green days than red. Losing streaks are part of the game. The edge is showing up tomorrow with the same discipline you had yesterday.</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container foot-grid">
+    <div class="foot-disclaimer">
+      This is a personal reference document. Not investment advice. Not a recommendation to buy or sell any security. Markets carry risk of capital loss. Trade only with money you can afford to lose. The author of this playbook (you) is responsible for every trade decision.
+    </div>
+    <div class="foot-meta">
+      <div>— Markets</div>
+      <div>NSE</div>
+      <div>BSE</div>
+      <div>Indian Equity</div>
+    </div>
+    <div class="foot-meta">
+      <div>— Version</div>
+      <div>1.0</div>
+      <div>Personal Edition</div>
+      <div>2026</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function copyCode(btn) {
+    const pre = btn.parentElement.querySelector('pre');
+    const text = pre.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.innerText;
+      btn.innerText = 'Copied ✓';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.innerText = orig;
+        btn.classList.remove('copied');
+      }, 1800);
+    });
+  }
+</script>
+
+</body>
+</html>
