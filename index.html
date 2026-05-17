@@ -584,6 +584,117 @@
     letter-spacing: 0.1em;
   }
 
+  /* ==================== PROMPT BLOCK ==================== */
+  .prompt-wrap {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    margin: 24px 0;
+    position: relative;
+  }
+
+  .prompt-wrap::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent);
+  }
+
+  .prompt-head {
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .prompt-title {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .prompt-body {
+    background: #050505;
+    padding: 0;
+    position: relative;
+    max-height: 520px;
+    overflow: auto;
+  }
+
+  .prompt-body pre {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: #c8c5be;
+    padding: 24px 28px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .input-zone {
+    padding: 16px 28px;
+    border-top: 1px solid var(--border);
+    background: rgba(212, 255, 58, 0.04);
+  }
+
+  .input-zone h5 {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .input-zone p {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin: 0;
+  }
+
+  .input-zone code {
+    background: var(--bg-elevated);
+    color: var(--accent);
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  .tip-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .tip {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    padding: 18px 20px;
+  }
+
+  .tip-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .tip p { font-size: 13px; color: var(--text-dim); margin: 0; line-height: 1.55; }
+
+  @media (max-width: 768px) {
+    .tip-grid { grid-template-columns: 1fr; }
+    .prompt-body { max-height: 380px; }
+  }
+
   /* ==================== FOOTER ==================== */
   footer {
     padding: 64px 0 48px;
@@ -684,6 +795,7 @@
       <a class="toc-item" href="#risk"><span>Risk Management</span><span class="toc-item-num">06</span></a>
       <a class="toc-item" href="#workflow"><span>Daily Workflow</span><span class="toc-item-num">07</span></a>
       <a class="toc-item" href="#progression"><span>Progression Roadmap</span><span class="toc-item-num">08</span></a>
+      <a class="toc-item" href="#analyzer"><span>Stock Analyzer Prompt</span><span class="toc-item-num">09</span></a>
     </div>
   </section>
 
@@ -1214,6 +1326,201 @@ Example:
     </div>
   </section>
 
+  <!-- ====================== 09 ANALYZER PROMPT ====================== -->
+  <section id="analyzer">
+    <div class="section-header">
+      <div class="section-num">09</div>
+      <h2>The <em>analyzer</em> prompt</h2>
+    </div>
+
+    <p class="lead">Paste this entire prompt into a fresh Claude conversation, drop your stock symbols at the bottom, and get a structured report you can decide from. Built on the Investors Way framework with stricter discipline baked in.</p>
+
+    <div class="callout">
+      <div class="callout-label">⏵ When to use</div>
+      <p>After your evening Chartink scan returns candidates. Pick the top 3-5 names, feed them to the prompt, get graded reports back. The prompt forces a market regime check first, then layered analysis per stock, ending with a comparison table if you gave it more than one.</p>
+    </div>
+
+    <div class="prompt-wrap">
+      <div class="prompt-head">
+        <div class="prompt-title">Stock Analyzer Prompt — v1.0</div>
+        <button class="copy-btn" onclick="copyPrompt(this)" style="position: static;">Copy full prompt</button>
+      </div>
+      <div class="prompt-body">
+<pre id="analyzer-prompt">You are my swing trading research analyst. I will give you one or more NSE stock symbols. For each one, produce a structured swing trade analysis report using the framework below.
+
+═══════════════════════════════════════════════════════════
+CONTEXT &amp; GROUND RULES
+═══════════════════════════════════════════════════════════
+
+I am a retail swing trader in India trading Nifty 500 stocks. My typical holding period is 2-15 trading days. I trade long-only via delivery (CNC) and use GTT orders for entry, stop-loss, and target. My capital and per-trade risk vary; you don't need to assume them.
+
+You are NOT a SEBI-registered investment advisor. This is educational research only. You will NEVER give a definitive "buy this" recommendation. You will analyze the setup and rate it; the decision is mine.
+
+Hard rules you must follow:
+1. SEARCH the web for current data (price, 50-DMA, 200-DMA, 52-week high, recent volume, sector, upcoming earnings, recent news). Do not rely on training data — prices change daily.
+2. If you cannot find a specific data point after searching, say "Not found" — never invent a number.
+3. Use the actual price, MAs, and volume from your search. Never round or approximate dramatically.
+4. Be brutally honest about setup quality. A "C-grade" rating is more valuable to me than fake optimism.
+5. Format every report identically so I can compare across stocks.
+
+═══════════════════════════════════════════════════════════
+THE FRAMEWORK YOU WILL APPLY
+═══════════════════════════════════════════════════════════
+
+LAYER 1 — MARKET REGIME (do this ONCE at the start, before any individual stock)
+
+Search and report:
+- Nifty 50 current level and whether it's above its 50-DMA and 200-DMA
+- India VIX current level
+- Nifty ADX(14) directional strength (estimate from recent trend if exact value unavailable)
+
+Translate this into a regime verdict:
+- 🟢 RISK-ON: Nifty above 50-DMA, VIX &lt; 15 → Full size, all strategies viable
+- 🟡 CAUTION: Nifty above 50-DMA but VIX 15-20, OR ADX &lt; 20 → Half size, prefer pullbacks over breakouts
+- 🔴 RISK-OFF: Nifty below 50-DMA OR VIX &gt; 20 → Avoid new longs, only A++ setups
+
+If regime is 🔴, every individual stock report should reflect this — most setups should be SKIP regardless of how good the chart looks.
+
+LAYER 2 — INDIVIDUAL STOCK ANALYSIS
+
+For EACH stock the user provides, produce this exact report structure:
+
+────────────────────────────────────────────────
+📌 [SYMBOL] — [Company Name]
+────────────────────────────────────────────────
+
+▸ Sector: [sector]
+▸ Current Price (LTP): ₹[X] (as of [date from search])
+▸ Market Cap: ₹[X] Cr
+
+▸ TECHNICAL SNAPSHOT
+  • 50-DMA: ₹[X] | Price vs 50-DMA: [+X% / -X%]
+  • 200-DMA: ₹[X] | Price vs 200-DMA: [+X% / -X%]
+  • 52-Week High: ₹[X] | Distance from 52WH: [-X%]
+  • 52-Week Low: ₹[X] | Distance from 52WL: [+X%]
+  • Recent volume vs 50-day avg: [Above / Normal / Below]
+  • Approximate RSI(14): [estimate based on recent action]
+  • ATR(14) % of price: [estimate; flag if &gt; 5% or &lt; 1.5%]
+
+▸ TREND STAGE (Weinstein classification)
+  • Stage 1 (basing) / Stage 2 (advancing) / Stage 3 (topping) / Stage 4 (declining)
+  • One-line reasoning
+
+▸ STRATEGY FIT (rate each as Strong / Possible / No Fit)
+  
+  📈 Strategy 1 — Momentum (Nifty 200 Momentum 30 style)
+     - 6-month return: [+X% / -X%]
+     - 12-month return: [+X% / -X%]
+     - Fit verdict: [Strong / Possible / No Fit]
+     - Why: [1 line]
+  
+  🚀 Strategy 2 — 52-Week High Breakout + Volume
+     - Recently broke 52WH? [Y/N, when]
+     - Base length: [X weeks]
+     - Volume confirmation: [Y/N]
+     - Fit verdict: [Strong / Possible / No Fit]
+     - Why: [1 line]
+  
+  🔄 Strategy 3 — Pullback to 20-DMA (mean-reversion in uptrend)
+     - Currently near 20-DMA? [Y/N]
+     - Both 50-DMA and 200-DMA rising? [Y/N]
+     - RSI(2) likely oversold? [Estimate Y/N]
+     - Fit verdict: [Strong / Possible / No Fit]
+     - Why: [1 line]
+
+▸ THE 4-POINT SETUP CHECK (only fill if at least one strategy is "Strong")
+  □ Level is clean (clear horizontal resistance or rising MA support)
+  □ Base/consolidation is tight (3-8 weeks with shrinking range)
+  □ Volume confirms (1.5x+ on breakout, or drying up on pullback)
+  □ No landmine within 5 trading days (earnings, ex-div, results, policy event)
+
+▸ TRADE PLAN (only if setup score is 3/4 or 4/4)
+  • Best strategy match: [Strategy 1 / 2 / 3]
+  • Suggested entry trigger: ₹[X]
+  • Suggested stop-loss: ₹[X] (based on swing low / breakout candle low)
+  • Risk per share: ₹[X]
+  • Target 1 (book 50%): ₹[X] — [reasoning: 1.5x ATR / prior swing high / 1R]
+  • Target 2 (trail): ₹[X] — [reasoning: prior peak / 2.5R / Fib extension]
+  • Risk:Reward to T1: [X]:1
+  • Risk:Reward to T2: [X]:1
+  • Time stop: 15 trading days max
+
+▸ RISK FLAGS (list anything concerning)
+  • Earnings within 5 trading days? [Y/N — date if Y]
+  • Under ASM/GSM surveillance? [Search and flag if found]
+  • Recent corporate action / news? [Brief note if material]
+  • Liquidity concern? [Flag if daily turnover &lt; ₹5 Cr]
+  • Stock-specific risk? [e.g., sector headwind, regulatory issue]
+
+▸ VERDICT
+  Grade: [A+ / A / B / C / SKIP]
+    A+ = textbook setup, every box ticked, strong regime
+    A  = strong setup, minor caveat
+    B  = decent but mixed signals, half-size only
+    C  = weak setup, paper-trade or skip
+    SKIP = clear no-go (regime, landmine, broken trend, no edge)
+  
+  Confidence in this verdict: [High / Medium / Low]
+  
+  One-paragraph summary explaining the grade in plain English.
+
+────────────────────────────────────────────────
+
+LAYER 3 — PORTFOLIO-LEVEL ADVICE (only if multiple stocks given)
+
+If I gave you 2+ stocks, after individual reports add:
+▸ Comparison table (Symbol | Grade | Strategy | R:R | One-line take)
+▸ Sector concentration warning if 2+ stocks in same sector
+▸ Recommendation on which to prioritize if I can only take 2-3
+
+═══════════════════════════════════════════════════════════
+OUTPUT STYLE
+═══════════════════════════════════════════════════════════
+
+- Use the exact section headers and bullet structure shown above
+- Numbers and verdicts must be specific; if uncertain, say "approx" or "estimate"
+- Total length per stock: 350-500 words. Tight, not bloated.
+- After all reports, end with: "Reports complete. These are research findings, not recommendations. Verify all data on your broker platform before placing any order."
+
+═══════════════════════════════════════════════════════════
+STOCK(S) TO ANALYZE
+═══════════════════════════════════════════════════════════
+
+[REPLACE THIS LINE WITH YOUR STOCK SYMBOLS — e.g., RELIANCE, HDFCBANK, TATAMOTORS]</pre>
+      </div>
+      <div class="input-zone">
+        <h5>⏵ Where to put your stocks</h5>
+        <p>Replace the last line <code>[REPLACE THIS LINE...]</code> with your symbols. Single stock: <code>RELIANCE</code>. Multiple: <code>RELIANCE, HDFCBANK, TATAMOTORS</code>. Best run after 3:30 PM IST for clean EOD data.</p>
+      </div>
+    </div>
+
+    <h3>Tips for getting better reports</h3>
+
+    <div class="tip-grid">
+      <div class="tip">
+        <div class="tip-label">⏵ Feed it the right list</div>
+        <p>Don't paste 20 random stocks. Run your Chartink scanner first, take the top 3-5 candidates, then send those to the prompt. Quality in, quality out.</p>
+      </div>
+      <div class="tip">
+        <div class="tip-label">⏵ Run at end of day</div>
+        <p>After 3:30 PM IST, web search returns settled prices. Mid-session prices change every few minutes and reports go stale fast.</p>
+      </div>
+      <div class="tip">
+        <div class="tip-label">⏵ Verify before trading</div>
+        <p>Reports are research, not signals. Pull up the actual chart on TradingView before placing any GTT. Numbers can be slightly off; chart structure can't lie.</p>
+      </div>
+      <div class="tip">
+        <div class="tip-label">⏵ Use follow-ups</div>
+        <p>After getting reports, ask: "Position size for ₹X capital at 1% risk on the A-grade stock" or "Write a Pine Script for the trade plan you proposed."</p>
+      </div>
+    </div>
+
+    <div class="callout danger">
+      <div class="callout-label">⏵ What this prompt cannot do</div>
+      <p>It can't replace your eyes on the chart. It can't guarantee real-time price accuracy. It won't catch every breaking news event. It assumes liquid Nifty 500 stocks — don't feed it microcaps. Most importantly, the grade is a research opinion, not a green light. Final decision is always yours.</p>
+    </div>
+  </section>
+
 </div>
 
 <!-- FOOTER -->
@@ -1249,6 +1556,19 @@ Example:
         btn.innerText = orig;
         btn.classList.remove('copied');
       }, 1800);
+    });
+  }
+
+  function copyPrompt(btn) {
+    const text = document.getElementById('analyzer-prompt').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.innerText;
+      btn.innerText = 'Copied ✓';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.innerText = orig;
+        btn.classList.remove('copied');
+      }, 2000);
     });
   }
 </script>
